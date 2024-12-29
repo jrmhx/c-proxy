@@ -35,8 +35,7 @@ void cache_deinit(void) {
     Free(cache);
 }
 
-cache_block *cache_find_LRU(char* hostname, char *path, int port)
-{
+cache_block *cache_find_LRU(char* hostname, char *path, int port) {
     pthread_rwlock_rdlock(&cache->cache_lock);
     cache_block *temp = cache->head->next;
     
@@ -67,8 +66,7 @@ cache_block *cache_find_LRU(char* hostname, char *path, int port)
     return NULL;
 }
 
-void cache_insert_LRU(char* hostname, char *path, int port, char *content, size_t size)
-{
+void cache_insert_LRU(char* hostname, char *path, int port, char *content, size_t size) {
     pthread_rwlock_wrlock(&cache->cache_lock);
     cache_block *temp = Malloc(sizeof(cache_block));
     pthread_rwlock_init(&temp->block_lock, NULL);
@@ -92,8 +90,7 @@ void cache_insert_LRU(char* hostname, char *path, int port, char *content, size_
     pthread_rwlock_unlock(&cache->cache_lock);
 }
 
-void cache_delete_LRU(void) //delete the last block
-{
+void cache_delete_LRU(void) { //delete the last block
     pthread_rwlock_wrlock(&cache->cache_lock);
     cache_block *temp = cache->tail->prev;
     if(temp == cache->head) {
@@ -111,8 +108,7 @@ void cache_delete_LRU(void) //delete the last block
     pthread_rwlock_unlock(&cache->cache_lock);
 }
 
-void cache_insert_LFU(char* hostname, char *path, int port, char *content, size_t size)
-{
+void cache_insert_LFU(char* hostname, char *path, int port, char *content, size_t size) {
     pthread_rwlock_wrlock(&cache->cache_lock);
     cache_block *temp = Malloc(sizeof(cache_block));
     pthread_rwlock_init(&temp->block_lock, NULL);
@@ -135,8 +131,8 @@ void cache_insert_LFU(char* hostname, char *path, int port, char *content, size_
     }
     pthread_rwlock_unlock(&cache->cache_lock);
 }
-cache_block *cache_find_LFU(char* hostname, char *path, int port)
-{
+
+cache_block *cache_find_LFU(char* hostname, char *path, int port) {
     pthread_rwlock_rdlock(&cache->cache_lock);
     cache_block *temp = cache->head->next;
     while (temp != cache->tail) {
@@ -152,8 +148,8 @@ cache_block *cache_find_LFU(char* hostname, char *path, int port)
     pthread_rwlock_unlock(&cache->cache_lock);
     return NULL;
 }
-void cache_delete_LFU(void)
-{
+
+void cache_delete_LFU(void) {
     pthread_rwlock_wrlock(&cache->cache_lock);
     cache_block *temp = cache->head->next;
     cache_block *min = temp;
