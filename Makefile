@@ -19,7 +19,7 @@ sbuf.o: sbuf.c sbuf.h
 	$(CC) $(CFLAGS) -c sbuf.c
 
 proxy: proxy.o cache.o csapp.o sbuf.o
-	$(CC) $(CFLAGS) proxy.o cache.o csapp.o sbuf.o -o proxy $(LDFLAGS)
+	$(CC) $(CFLAGS) proxy.o cache.o csapp.o sbuf.o -o target/proxy $(LDFLAGS)
 
 tiny:
 	(cd tiny; make clean; make)
